@@ -1,0 +1,30 @@
+{
+  "name": "sprite-editor-c64",
+  "version": "1.0.0",
+  "description": "C64 Sprite Editor",
+  "dependencies": {
+    "@types/lodash": "^4.14.74",
+    "lodash": "^4.17.4"
+  },
+  "devDependencies": {
+    "clean-webpack-plugin": "^0.1.17",
+    "css-loader": "^0.28.5",
+    "html-webpack-harddisk-plugin": "^0.1.0",
+    "html-webpack-plugin": "^2.30.1",
+    "node-sass": "^4.5.3",
+    "sass-loader": "^6.0.6",
+    "style-loader": "^0.18.2",
+    "ts-loader": "^2.3.4",
+    "typescript": "^2.4.2",
+    "webpack": "^3.5.5",
+    "webpack-dev-server": "^2.7.1",
+    "webpack-merge": "^4.1.0"
+  },
+  "scripts": {
+    "start": "node_modules/webpack-dev-server/bin/webpack-dev-server.js --config webpack.dev.js --content-base app/",
+    "build": "webpack --config webpack.prod.js"
+  },
+  "keywords": [],
+  "author": "Kimmo Pirkkalainen",
+  "license": "MIT"
+}

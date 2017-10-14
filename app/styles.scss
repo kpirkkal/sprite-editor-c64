@@ -1,0 +1,34 @@
+body {
+  background-color: black;
+}
+
+.p-10 {
+  padding: 10px;
+}
+
+.main {
+  margin: 0 auto;
+  width: 520px;
+}
+
+.canvas {
+  background: #5090d0;
+  width: 520px;
+  padding-top: 5px;
+  padding-bottom: 5px;
+}
+
+.controls {
+  background: #5090d0;
+  width: 520px;
+  margin-top: 5px;
+  height: 50px;
+}
+
+.data {
+  color: #181090;
+  background: #5090d0;
+  font-size: 0.8em;
+  font-family: monospace;
+  width: 520px;
+}
