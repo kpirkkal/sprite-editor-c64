@@ -2,6 +2,10 @@ import * as _ from "lodash";
 import {getBalloon, getNinja} from "./sample";
 import {convertToBytes, toHexString} from "./conversion";
 
+const erase = 0;
+const brush = 1;
+type PixelSelection = 0 | 1;
+
 let dataElement = document.getElementById('basic-data');
 let byteElement = document.getElementById('byte-data');
 
@@ -10,9 +14,27 @@ let ctx : CanvasRenderingContext2D = canvas.getContext('2d');
 
 canvas.onselectstart = function () {return false};
 
-canvas.addEventListener('click', function(event) {
-    select(event.offsetX - 10, event.offsetY - 10);
+var mousepressed = false;
+
+window.addEventListener('mousedown', event => mousepressed = true);
+window.addEventListener('mouseup', event => mousepressed = false);
+
+canvas.addEventListener('mousedown', event => makeSelection(event));
+canvas.addEventListener('mousemove', event => {
+    if(mousepressed) 
+        makeSelection(event);
 });
+
+
+//FIXME: this prevents overflown pixel to be drawn on the other side
+const coordFix = (coord: number) => Math.min(Math.max(0, coord - 10), 470)
+function makeSelection(event: any) {
+    const [x, y] = [coordFix(event.offsetX), coordFix(event.offsetY)]
+    if (event.metaKey)
+        select(x, y, erase);
+    else
+        select(x, y, brush);
+}
 
 let data = getBalloon();
 
@@ -99,15 +121,16 @@ function printByte(data: number[], element: HTMLElement): void {
     element.innerText = _.join(text, '\n');
 }
 
-function select(x: number, y: number): void {
+function select(x: number, y: number, selection: PixelSelection): void {
     let coordX = Math.floor(x / 20);
     let coordY = Math.floor(y / 20);
 
     let index = coordY * 24 + coordX;
-    data[index] = data[index] == 1 ? 0 : 1;
+    data[index] = selection;
 
     draw();
 }
+
 
 draw();
 
