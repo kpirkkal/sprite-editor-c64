@@ -16,24 +16,26 @@ canvas.onselectstart = function () {return false};
 
 var mousepressed = false;
 
-window.addEventListener('mousedown', event => mousepressed = true);
-window.addEventListener('mouseup', event => mousepressed = false);
+window.addEventListener('mousedown', () => mousepressed = true);
+window.addEventListener('mouseup', () => mousepressed = false);
 
 canvas.addEventListener('mousedown', event => makeSelection(event));
 canvas.addEventListener('mousemove', event => {
-    if(mousepressed) 
+    if (mousepressed) {
         makeSelection(event);
+    }
 });
 
 
 //FIXME: this prevents overflown pixel to be drawn on the other side
-const coordFix = (coord: number) => Math.min(Math.max(0, coord - 10), 470)
+const coordFix = (coord: number) => Math.min(Math.max(0, coord - 10), 470);
 function makeSelection(event: any) {
-    const [x, y] = [coordFix(event.offsetX), coordFix(event.offsetY)]
-    if (event.metaKey)
+    const [x, y] = [coordFix(event.offsetX), coordFix(event.offsetY)];
+    if (event.metaKey) {
         select(x, y, erase);
-    else
+    } else {
         select(x, y, brush);
+    }
 }
 
 let data = getBalloon();
@@ -130,7 +132,6 @@ function select(x: number, y: number, selection: PixelSelection): void {
 
     draw();
 }
-
 
 draw();
 
