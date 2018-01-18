@@ -2,9 +2,13 @@ import * as _ from "lodash";
 import {getBalloon, getNinja} from "./sample";
 import {convertToBytes, toHexString} from "./conversion";
 
-const erase = 0;
-const brush = 1;
-type PixelSelection = 0 | 1;
+enum Tool {
+    BRUSH,
+    ERASER,
+    TOGGLE,
+}
+
+let currentTool : Tool = Tool.BRUSH;
 
 let dataElement = document.getElementById('basic-data');
 let byteElement = document.getElementById('byte-data');
@@ -16,13 +20,24 @@ canvas.onselectstart = function () {return false};
 
 var mousepressed = false;
 
+canvas.addEventListener('click', () => {
+    makeSelection(event);
+});
+
 window.addEventListener('mousedown', () => mousepressed = true);
 window.addEventListener('mouseup', () => mousepressed = false);
 
-canvas.addEventListener('mousedown', event => makeSelection(event));
+canvas.addEventListener('mousedown', event => {
+    if (currentTool == Tool.BRUSH || currentTool == Tool.ERASER) {
+        makeSelection(event)
+    }
+});
+
 canvas.addEventListener('mousemove', event => {
-    if (mousepressed) {
-        makeSelection(event);
+    if (currentTool == Tool.BRUSH || currentTool == Tool.ERASER) {
+        if (mousepressed) {
+            makeSelection(event);
+        }
     }
 });
 
@@ -30,12 +45,9 @@ canvas.addEventListener('mousemove', event => {
 //FIXME: this prevents overflown pixel to be drawn on the other side
 const coordFix = (coord: number) => Math.min(Math.max(0, coord - 10), 470);
 function makeSelection(event: any) {
+    console.log(event.offsetX, event.offsetY);
     const [x, y] = [coordFix(event.offsetX), coordFix(event.offsetY)];
-    if (event.metaKey) {
-        select(x, y, erase);
-    } else {
-        select(x, y, brush);
-    }
+    select(x, y, currentTool);
 }
 
 let data = getBalloon();
@@ -123,12 +135,17 @@ function printByte(data: number[], element: HTMLElement): void {
     element.innerText = _.join(text, '\n');
 }
 
-function select(x: number, y: number, selection: PixelSelection): void {
+function select(x: number, y: number, selection: Tool): void {
     let coordX = Math.floor(x / 20);
     let coordY = Math.floor(y / 20);
 
     let index = coordY * 24 + coordX;
-    data[index] = selection;
+
+    if (selection != Tool.TOGGLE) {
+        data[index] = currentTool == Tool.ERASER ? 0 : 1;
+    } else {
+        data[index] = data[index] == 1 ? 0 : 1;
+    }
 
     draw();
 }
@@ -149,3 +166,28 @@ window.ninja = function(): void {
     data = getNinja();
     draw();
 };
+
+window.selectBrush = function(): void {
+    currentTool = Tool.BRUSH;
+    setButtonState(currentTool);
+};
+
+window.selectEraser = function(): void {
+    currentTool = Tool.ERASER;
+    setButtonState(currentTool);
+};
+
+window.selectToggle = function (): void {
+    currentTool = Tool.TOGGLE;
+    setButtonState(currentTool);
+};
+
+function setButtonState(tool: Tool) {
+    let eraser = document.getElementById('button_eraser');
+    let brush = document.getElementById('button_brush');
+    let pixel = document.getElementById('button_toggle');
+
+    eraser.setAttribute('class', tool == Tool.ERASER ? 'selected' : '');
+    brush.setAttribute('class', tool == Tool.BRUSH ? 'selected' : '');
+    pixel.setAttribute('class', tool == Tool.TOGGLE ? 'selected' : '');
+}

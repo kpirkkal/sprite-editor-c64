@@ -13,12 +13,19 @@
             </div>
             <div class="controls">
                 <div class="p-10">
-                <button onclick="window.clear()">Clear</button>
-                <button onclick="window.balloon()">Sample [Balloon]</button>
-                <button onclick="window.ninja()">Sample [Ninja]</button>
+                    <button id="button_brush" tabindex="1" class="selected" onclick="window.selectBrush()">Brush</button>
+                    <button id="button_eraser" tabindex="2" onclick="window.selectEraser()">Eraser</button>
+                    <button id="button_toggle" tabindex="3" onclick="window.selectToggle()">Toggle</button>
+
+                    <span class="separator"></span>
+
+                    <button onclick="window.clear()">Clear</button>
+                    <button onclick="window.balloon()">Sample [Balloon]</button>
+                    <button onclick="window.ninja()">Sample [Ninja]</button>
                 </div>
             </div>
-            <pre id="byte-data" class="data"></pre>
+
+            <pre id="byte-data" class="data"><i class="far far-user"></i></pre>
             <pre id="basic-data" class="data"></pre>
             <br/>
         </div>

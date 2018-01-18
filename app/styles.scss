@@ -11,6 +11,15 @@ body {
   width: 520px;
 }
 
+.selected {
+  color: #DD8855;
+  font-style: oblique;
+}
+
+.separator {
+  margin: 25px;
+}
+
 .canvas {
   background: #5090d0;
   width: 520px;
